@@ -1,34 +1,30 @@
 require "player"
+require "gworld"
 
 iceConfig = {
     left = "left",
     up = "up",
     down = "down",
     right = "right",
+    collisionClass = "IcePlayer"
 }
 fireConfig = {
     up = "w",
     left = "a",
     down = "s",
     right = "d",
+    collisionClass = "FirePlayer"
 }
 IcePlayer = {}
 FirePlayer = {}
+GameWorld = {}
 
 
 
 function love.load()
-    wf = require "lib/windfield"
 
-    world = wf.newWorld(0, 500)
 
-    ground = world:newRectangleCollider(100, 400, 600, 100)
-    wall = world:newRectangleCollider(300, 100, 100, 50)
-    wall2 = world:newRectangleCollider(500, 100, 100, 50)
-
-    ground:setType("static")
-    wall:setType("static")
-    wall2:setType("static")
+    GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
     FirePlayer = Player:new(fireConfig)
 end
@@ -36,12 +32,12 @@ end
 function love.update(dt)
     IcePlayer:update(dt)
     FirePlayer:update(dt)
-    world:update(dt)
+    GameWorld.world:update(dt)
 end
 
 
 function love.draw()
-    world:draw()
+    GameWorld.world:draw()
 end
 
 function love.keypressed(key)
