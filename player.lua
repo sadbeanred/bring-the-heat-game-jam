@@ -20,11 +20,11 @@ function Player:update(dt)
     local px, py = self.collider:getLinearVelocity()
     if love.keyboard.isDown(self.config.left) and px > -300 then
         self.facing.x = -1
-        self.collider:applyLinearImpulse(-5000, 0)
+        self.collider:applyLinearImpulse(-1000, 0)
     end
     if love.keyboard.isDown(self.config.right) and px < 300 then
         self.facing.x = 1
-        self.collider:applyLinearImpulse(5000, 0)
+        self.collider:applyLinearImpulse(1000, 0)
     end
     if love.keyboard.isDown(self.config.up) and py == 0 then
         self.facing.y = 1
