@@ -6,18 +6,31 @@ iceConfig = {
     up = "up",
     down = "down",
     right = "right",
-    collisionClass = "IcePlayer"
+    collisionClass = "IcePlayer",
+    shoot = "return",
+    spawn = {
+        x = 350,
+        y = 100,
+    }
 }
+
 fireConfig = {
     up = "w",
     left = "a",
     down = "s",
     right = "d",
-    collisionClass = "FirePlayer"
+    collisionClass = "FirePlayer",
+    shoot = "space",
+    spawn = {
+        x = 200,
+        y = 100,
+    }
 }
 IcePlayer = {}
 FirePlayer = {}
 GameWorld = {}
+
+Entities = {}
 
 
 
@@ -41,6 +54,15 @@ function love.draw()
 end
 
 function love.keypressed(key)
+    if key == "escape" then
+        love.event.quit(0)
+    end
+    if IcePlayer then
+        IcePlayer:keypressed(key)
+    end
+    if FirePlayer then
+        FirePlayer:keypressed(key)
+    end
 end
 
 function resize (w, h)
