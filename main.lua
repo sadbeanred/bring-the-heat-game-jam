@@ -56,5 +56,7 @@ function resize (w, h)
 end
 
 function love.resize (w, h)
-	resize (w, h)
+    if window then
+        resize (w, h)
+    end
 end
