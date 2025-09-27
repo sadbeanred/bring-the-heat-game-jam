@@ -10,7 +10,7 @@ Player.__index = Player
 function Player:new(config)
     local obj = setmetatable({}, self)
     obj.config = config
-    obj.collider = GameWorld.world:newRectangleCollider(obj.config.spawn.x, obj.config.spawn.y, 80, 80)
+    obj.collider = GameWorld.world:newRectangleCollider(obj.config.spawn.x, obj.config.spawn.y, 40, 40)
     obj.collider:setCollisionClass(config.collisionClass)
     return obj
 end
