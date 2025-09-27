@@ -55,7 +55,7 @@ end
 function addCollisionClasses(world)
     world:addCollisionClass('FirePlayer')
     world:addCollisionClass('IcePlayer', {ignores = {'FirePlayer'}})
-    world:addCollisionClass('FireBullet', {ignores = {'IcePlayer'}})
-    world:addCollisionClass('IceBullet', {ignores = {'FirePlayer'}})
+    world:addCollisionClass('FireBullet', {ignores = {'FirePlayer'}})
+    world:addCollisionClass('IceBullet', {ignores = {'IcePlayer'}})
     world:addCollisionClass('EnergyField', {ignores = {'FirePlayer', 'IcePlayer'}})
 end

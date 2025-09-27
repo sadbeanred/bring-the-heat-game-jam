@@ -1,4 +1,5 @@
 require "player"
+require "game"
 require "gworld"
 
 iceConfig = {
@@ -6,8 +7,9 @@ iceConfig = {
     up = "up",
     down = "down",
     right = "right",
-    collisionClass = "IcePlayer",
+    name = "Ice",
     shoot = "return",
+    colour= {0,0,1},
     spawn = {
         x = 350,
         y = 100,
@@ -19,13 +21,15 @@ fireConfig = {
     left = "a",
     down = "s",
     right = "d",
-    collisionClass = "FirePlayer",
+    name = "Fire",
     shoot = "space",
+    colour= {1,0,0},
     spawn = {
         x = 200,
         y = 100,
     }
 }
+
 IcePlayer = {}
 FirePlayer = {}
 GameWorld = {}
@@ -50,7 +54,10 @@ end
 
 
 function love.draw()
+    IcePlayer:draw()
+    FirePlayer:draw()
     GameWorld.world:draw()
+    Game:draw()
 end
 
 function love.keypressed(key)
