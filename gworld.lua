@@ -25,18 +25,21 @@ function GWorld:new()
     obj.topBoundary = addStaticObject(obj.world, 0, 0, WindowWidth, 1)
     obj.bottomBoundary = addStaticObject(obj.world, 0, WindowHeight-1, WindowWidth, 1)
     obj.ground = addStaticObject(obj.world, (WindowWidth-GroundWidth)/2, WindowHeight-GroundHeight, GroundWidth, GroundHeight)
-    obj.centreWall = addStaticObject(obj.world, (WindowWidth-WallWidth)/2, WindowHeight-JumpHeight, WallWidth, WallHeight)
+    obj.centreWall = addStaticObject(obj.world, (WindowWidth-WallWidth*1.5)/2, WindowHeight-JumpHeight, WallWidth*1.5, WallHeight)
 
-    -- obj.leftMarginWall = addStaticObject(obj.world, CloseSideWallMargin, WindowHeight-(JumpHeight*1.75), WallWidth, WallHeight)
-    -- obj.rightMarginWall = addStaticObject(obj.world, WindowWidth-CloseSideWallMargin-WallWidth, WindowHeight-(JumpHeight*1.75), WallWidth, WallHeight)
-    
     obj.leftMarginWall, obj.rightMarginWall = addMirroredWalls(obj.world, CloseSideWallMargin, WindowHeight-(JumpHeight*1.75), WallWidth, WallHeight)
+    obj.leftCornerWall, obj.rightCornerWall = addMirroredWalls(obj.world, 0, WindowHeight-(JumpHeight*1.75)+WallHeight, WallWidth*.75, WallHeight)
+    obj.leftHighWall, obj.rightHighWall = addMirroredWalls(obj.world, WallWidth*1.75, WindowHeight-(JumpHeight*2.5), WallWidth/2, WallHeight*.75)
+    obj.leftLookoutWall, obj.rightLookoutWall = addMirroredWalls(obj.world, WallWidth*1.5, WindowHeight-(JumpHeight*3.25), WallWidth/4, WallHeight*.75)
 
-    obj.leftWall = addStaticObject(obj.world, 0, WindowHeight-(JumpHeight*1.75)+WallHeight, WallWidth*.75, WallHeight)
-    obj.rightWall = addStaticObject(obj.world, WindowWidth-WallWidth*.75, WindowHeight-(JumpHeight*1.75)+WallHeight, WallWidth*.75, WallHeight)
-    -- new left wall. use 2.5 jump height above window. one wall margin away from left margin wall
-    obj.newLeftWall = addStaticObject(obj.world, WallWidth+(CloseSideWallMargin*2), WindowHeight-(JumpHeight*2.5), WallWidth/4, WallHeight)
-    obj.newRightWall = addStaticObject(obj.world, WindowWidth-(WallWidth*1.75)-CloseSideWallMargin, WindowHeight-(JumpHeight*2.5), WallWidth/4, WallHeight)
+    obj.highCentreField = addEnergyField(obj.world, WallWidth*2.25, WindowHeight - (JumpHeight *2.4), WindowWidth - WallWidth*2.25, WindowHeight - (JumpHeight*2.4))
+
+    obj.centreField = addEnergyField(obj.world, WindowWidth/2, WindowHeight - GroundHeight, WindowWidth/2, WindowHeight - JumpHeight + WallHeight)
+
+    obj.leftEnergyField, obj.rightEnergyField = addMirroredEnergyFields(obj.world, WallWidth*1.75, WindowHeight - (JumpHeight *2.5), WallWidth*1.75, WindowHeight - (JumpHeight*3.25))
+    
+
+    
     return obj
 end
 
@@ -49,6 +52,19 @@ end
 function addStaticObject(world, x, y, width, height)
     local obj = world:newRectangleCollider(x, y, width, height)
     obj:setType("static")
+    return obj
+end
+
+function addMirroredEnergyFields(world, x1, y1, x2, y2)
+    local leftField = addEnergyField(world, x1, y1, x2, y2)
+    local rightField = addEnergyField(world, WindowWidth - x2, y1, WindowWidth - x1, y2)
+    return leftField, rightField
+end
+
+function addEnergyField(world, x1, y1, x2, y2)
+    local obj = world:newLineCollider(x1, y1, x2, y2)
+    obj:setType("static")
+    obj:setCollisionClass('EnergyField')
     return obj
 end
 
