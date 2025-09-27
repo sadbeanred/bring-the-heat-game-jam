@@ -42,8 +42,6 @@ end
 
 function love.draw()
     world:draw()
-    
-
 end
 
 function love.keypressed(key)
