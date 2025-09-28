@@ -81,8 +81,8 @@ function love.load()
     GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
     FirePlayer = Player:new(fireConfig)
-    IceCrystalManager = CrystalManager:new("Ice")
-    FireCrystalManager = CrystalManager:new("Fire")
+    IceCrystalManager = CrystalManager:new("Ice", "assets/explosive_barrel.png")
+    FireCrystalManager = CrystalManager:new("Fire", "assets/ice_crystal.png")
     Game:load()
 end
 

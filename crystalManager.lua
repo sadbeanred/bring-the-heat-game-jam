@@ -33,11 +33,12 @@ CrystalLocations = {
         }
     }
 }
-function CrystalManager:new(faction)
+function CrystalManager:new(faction, spritePath)
     local obj = setmetatable({}, self)
     obj.faction = faction
     obj.timer = 0
     obj.crystals = {}
+    obj.sprite = love.graphics.newImage(spritePath)
     return obj
 end
 
@@ -60,7 +61,7 @@ end
 function CrystalManager:spawnCrystal()
     for i, location in ipairs(CrystalLocations[self.faction]) do
         if next(GameWorld.world:queryRectangleArea(location.x, location.y, CrystalSides, CrystalSides, {"Crystal"})) == nil then
-            local crystal = Crystal:new(location.x, location.y, self.faction)
+            local crystal = Crystal:new(location.x, location.y, self.faction, self.sprite)
             table.insert(self.crystals, crystal)
             break
         end
