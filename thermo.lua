@@ -31,7 +31,7 @@ function Thermo:draw()
   -- total width = tube length + bulb radius*2 + gap
   local gap = self.r * 0.2
   local totalW = self.h + gap + self.r*2
-  local tubeX = self.x - totalW/2
+  local tubeX = self.x - (totalW - self.r*2)/2
   local tubeY = self.y - self.w/2
 
   local fillW = self.h * pct

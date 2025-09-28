@@ -13,12 +13,11 @@ COLD_WIN = -10
 local gauge
 
 function Game.load()
-    gauge = Thermo.new { x = WindowWidth/2, y = 50, height = 220, width = 24, bulbRadius = 28, min = COLD_WIN, max = HOT_WIN, value = 0 }
+    gauge = Thermo.new { x = WindowWidth / 2, y = 50, height = 220, width = 24, bulbRadius = 28, min = COLD_WIN, max = HOT_WIN, value = 0 }
 end
 
 function Game.update(dt)
 end
-
 
 function ChangeScore(value)
     Temperature = Temperature + value
@@ -29,16 +28,19 @@ function ChangeScore(value)
 end
 
 function PlayerWin(side, score)
+    Temperature = 0
     State.current = "GameOver"
 end
 
 function KillPlayer(player)
     local playertype = player.config.name;
-    ChangeScore(({
-        Fire = function() return -5 end,
-        Ice = function() return 5 end
-    })[playertype]())
-    player:respawn()
+    local didKill = player:kill()
+    if didKill then
+        ChangeScore(({
+            Fire = function() return -5 end,
+            Ice = function() return 5 end
+        })[playertype]())
+    end
 end
 
 function DestroyCrystal(faction)

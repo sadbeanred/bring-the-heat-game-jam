@@ -15,8 +15,8 @@ iceConfig = {
     shoot = "return",
     colour = { 0, 0, 1 },
     spawn = {
-        x = 350,
-        y = 100,
+        x = 100,
+        y = 300,
     }
 }
 
@@ -29,8 +29,8 @@ fireConfig = {
     shoot = "space",
     colour = { 1, 0, 0 },
     spawn = {
-        x = 200,
-        y = 100,
+        x = WindowWidth - 100 - 40,
+        y = 300,
     }
 }
 
@@ -43,6 +43,7 @@ Entities = {}
 
 
 function love.load()
+
     GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
     FirePlayer = Player:new(fireConfig)
