@@ -1,5 +1,6 @@
 require "player"
 require "game"
+require "gameover"
 require "gworld"
 require "menu"
 require "crystal"
@@ -38,9 +39,6 @@ FirePlayer = {}
 GameWorld = {}
 Entities = {}
 
-State = {}
-State.items = { "Menu", "Game", "GameOver"}
-State.current = "Menu"
 
 
 
@@ -50,6 +48,7 @@ function love.load()
     FirePlayer = Player:new(fireConfig)
     IceCrystalManager = CrystalManager:new("Ice")
     FireCrystalManager = CrystalManager:new("Fire")
+    Game:load()
 end
 
 function love.update(dt)
@@ -91,7 +90,7 @@ function love.keypressed(key)
     elseif State.current == "Menu" then
         Menu:keypressed(key)
     elseif State.current == "GameOver" then
-
+        GameOver:keypressed(key)
     end
 end
 

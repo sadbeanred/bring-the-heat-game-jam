@@ -7,7 +7,7 @@ CrystalLocations = {
    Fire = {
         {
             x= ((WindowWidth-GroundWidth)/4) + (CrystalSides/2),
-            y = WindowHeight - (GroundHeight/1.5)
+            y = WindowHeight - (GroundHeight/1.5) - 50
         },
         {
             x = (CloseSideWallMargin/2) - (CrystalSides/2),
@@ -21,7 +21,7 @@ CrystalLocations = {
     Ice = {
         {
             x = (WindowWidth - ((WindowWidth-GroundWidth)/3)) - (CrystalSides/2),
-            y =WindowHeight - (GroundHeight/1.5)
+            y =WindowHeight - (GroundHeight/1.5) - 50
         },
         {
             x = WindowWidth - (CloseSideWallMargin/2) - (CrystalSides/2),
@@ -44,7 +44,6 @@ end
 function CrystalManager:update(dt)
     self.timer = self.timer + dt
     if self.timer >= Interval then
-        print("Spawning " .. self.faction .. " crystal")
         self:spawnCrystal()
         self.timer = 0
     end
@@ -60,13 +59,11 @@ end
 
 function CrystalManager:spawnCrystal()
     for i, location in ipairs(CrystalLocations[self.faction]) do
-        print ("Checking location " .. i .. " for " .. self.faction .. " crystal")
         if next(GameWorld.world:queryRectangleArea(location.x, location.y, CrystalSides, CrystalSides, {"Crystal"})) == nil then
             local crystal = Crystal:new(location.x, location.y, self.faction)
             table.insert(self.crystals, crystal)
             break
         end
-        print("Location occupied, cannot spawn crystal")
     end
 end
 
