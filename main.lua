@@ -2,6 +2,8 @@ require "player"
 require "game"
 require "gworld"
 require "menu"
+require "crystal"
+require "crystalManager"
 
 iceConfig = {
     left = "left",
@@ -46,6 +48,8 @@ function love.load()
     GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
     FirePlayer = Player:new(fireConfig)
+    IceCrystalManager = CrystalManager:new("Ice")
+    FireCrystalManager = CrystalManager:new("Fire")
 end
 
 function love.update(dt)
@@ -53,6 +57,8 @@ function love.update(dt)
         IcePlayer:update(dt)
         FirePlayer:update(dt)
         GameWorld.world:update(dt)
+        IceCrystalManager:update(dt)
+        FireCrystalManager:update(dt)
     end
 end
 
@@ -61,6 +67,8 @@ function love.draw()
         IcePlayer:draw()
         FirePlayer:draw()
         GameWorld.world:draw()
+        IceCrystalManager:draw()
+        FireCrystalManager:draw()
         Game:draw()
     elseif State.current == "Menu" then
         Menu:draw()
