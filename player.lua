@@ -119,7 +119,8 @@ function Player:tryShoot(dt)
     self.shootCooldown = self.shootCooldown + dt
     if self.shootCooldown > 0.1 then
         local px, py = self.collider:getPosition()
-        local bullet = Bullet:new(self, px,py, self.facing.x, self.facing.y)
+        
+        local bullet = Bullet:new(self, px,py, round(self.facing.x), round(self.facing.y))
         table.insert(self.bullets, bullet)
         self.shootCooldown = 0
     end
@@ -133,7 +134,6 @@ function Player:keypressed(key)
     end
 end
 
-
 function Player:respawn()
     self.collider:setPosition(self.config.spawn.x, self.config.spawn.y)
 end
@@ -145,4 +145,9 @@ function Player:draw ()
     local px, py = self.collider:getPosition()
     love.graphics.rectangle("fill", px-(self.size.x/2), py- (self.size.y/2), self.size.x, self.size.y)
     love.graphics.pop()
+end
+
+function round(num)
+    local addVal = num >= 0 and 0.5 or -0.5
+    return math.floor(num + addVal)
 end
