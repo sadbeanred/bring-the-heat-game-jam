@@ -20,8 +20,8 @@ function GWorld:new()
 
     addCollisionClasses(obj.world)
 
-    obj.leftBoundary                          = addStaticObject(obj.world, 0, 0, 1, WindowHeight-250)
-    obj.rightBoundary                         = addStaticObject(obj.world, WindowWidth - 1, 0, 1, WindowHeight-250)
+    obj.leftBoundary                          = addStaticObject(obj.world, 0, 0, 1, WindowHeight)
+    obj.rightBoundary                         = addStaticObject(obj.world, WindowWidth - 1, 0, 1, WindowHeight)
     obj.topBoundary                           = addStaticObject(obj.world, 0, 0, WindowWidth, 1)
     -- obj.bottomBoundary = addStaticObject(obj.world, 0, WindowHeight-1, WindowWidth, 1)
     obj.ground                                = addStaticObject(obj.world, (WindowWidth - GroundWidth) / 2,

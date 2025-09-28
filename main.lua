@@ -6,6 +6,8 @@ require "menu"
 require "crystal"
 require "crystalManager"
 
+joystick = love.joystick.getJoysticks()[1]
+
 iceConfig = {
     left = "left",
     up = "up",
@@ -17,7 +19,15 @@ iceConfig = {
     spawn = {
         x = 350,
         y = 100,
-    }
+    },
+    joystickUp = "lefty",
+    joystickLeft = "leftx",
+    lookUp = "righty",
+    lookLeft = "rightx",
+    shootButton = "triggerright",
+    jumpButton = "leftshoulder",
+    sprintButton = "rightshoulder",
+    gpIndex = 1
 }
 
 fireConfig = {
@@ -31,7 +41,25 @@ fireConfig = {
     spawn = {
         x = 200,
         y = 100,
-    }
+    },
+    joystickUp = "lefty",
+    joystickLeft = "leftx",
+    lookUp = "righty",
+    lookLeft = "rightx",
+    shootButton = "triggerright",
+    jumpButton = "leftshoulder",
+    sprintButton = "rightshoulder",
+    gpIndex = 2
+}
+
+menuConfig = {
+    upKey = "up",
+    downKey = "down",
+    selectKey = "space",
+    upButton = "dpup",
+    downButton = "dpdown",
+    yAxis = "lefty",
+    selectButton = "a",
 }
 
 IcePlayer = {}
@@ -52,6 +80,12 @@ function love.load()
 end
 
 function love.update(dt)
+    if State.current == "Menu" then
+        Menu:update(dt)
+    end
+    if State.current == "GameOver" then
+        GameOver:update(dt)
+    end
     if State.current == "Game" then
         IcePlayer:update(dt)
         FirePlayer:update(dt)
