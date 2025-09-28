@@ -12,9 +12,9 @@ RESPAWN_INVULNERABILITY_TIME = 1
 XAcceleration = 50
 XMaxSpeed = 300
 LeftXDeadZone = 0.3
-RightXDeadZone = 0.3
+RightXDeadZone = 0.5
 LeftYDeadZone = 0.3
-RightYDeadZone = 0.3
+RightYDeadZone = 0.5
 YAcceleration = 150
 SprintFactor = 2
 
@@ -66,7 +66,7 @@ function Player:manageGamepadInputs(dt)
         if axisY < -1 * LeftYDeadZone then
             self:tryJump(axisY, dt)
         end
-        if math.abs(lookX) > RightXDeadZone or math.abs(RightYDeadZone) > 0.3 then
+        if math.abs(lookX) > RightXDeadZone or math.abs(lookY) > RightYDeadZone then
             self.facing.x = lookX
             self.facing.y = lookY
         end
