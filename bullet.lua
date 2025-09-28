@@ -1,7 +1,5 @@
 require "game"
-Bullet = {
-
-}
+Bullet = {}
 Bullet.__index = Bullet
 
 BULLET_SPEED = 500
@@ -14,10 +12,14 @@ function Bullet:new(from, x, y, xd, yd)
     bullet.collider:applyLinearImpulse(BULLET_SPEED * xd, BULLET_SPEED * yd)
     bullet.collider:setCollisionClass(from.config.name .. "Bullet")
     bullet.from = from
+    bullet.lifetime = 0
+    bullet.maxAge = 3
     return bullet
 end
 
 function Bullet:update(dt)
+    self.lifetime = self.lifetime + dt
+
     if self.collider:enter("IcePlayer") and self.from.config.name == "Fire" then
         local collision_data = self.collider:getEnterCollisionData('IcePlayer')
         self.collider:destroy()
@@ -28,6 +30,11 @@ function Bullet:update(dt)
         local collision_data = self.collider:getEnterCollisionData('FirePlayer')
         self.collider:destroy()
         KillPlayer(collision_data.collider:getObject())
+    end
+    if (not self.collider:isDestroyed()) then
+        if self.lifetime > self.maxAge then
+            self.collider:destroy()
+        end
     end
 
     if self.collider:enter("EnergyField") or

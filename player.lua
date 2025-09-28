@@ -38,10 +38,18 @@ function Player:update(dt)
         self.collider:applyLinearImpulse(0, -5000)
     end
 
+    local removableItems = {}
     if self.bullets then
         for i, bullet in ipairs(self.bullets) do
             bullet:update(dt)
+
+            if(bullet.collider:isDestroyed()) then
+                table.insert(removableItems, i)
+            end
         end
+    end
+    for _, i in ipairs(removableItems) do
+        table.remove(self.bullets, i)
     end
     self:handleCollision()
 
