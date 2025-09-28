@@ -4,4 +4,5 @@ function love.conf(t)
     t.window.resizable = false
     t.window.vsync = 0
     t.window.title = "Bring The Heat"
+    t.console = true
 end

@@ -2,7 +2,7 @@ GWorld = {}
 GWorld.__index = GWorld
 
 Gravity = 7500
-WindowWidth = 1024
+WindowWidth = 1020
 WindowHeight = 768
 GroundHeight = 50
 GroundWidth = 800
@@ -74,4 +74,6 @@ function addCollisionClasses(world)
     world:addCollisionClass('FireBullet', {ignores = {'FirePlayer'}})
     world:addCollisionClass('IceBullet', {ignores = {'IcePlayer'}})
     world:addCollisionClass('EnergyField', {ignores = {'FirePlayer', 'IcePlayer'}})
+    world:addCollisionClass('IceCrystal', {ignores = {'FirePlayer', 'IcePlayer', 'IceBullet'}})
+    world:addCollisionClass('FireCrystal', {ignores = {'FirePlayer', 'IcePlayer', 'FireBullet'}})
 end

@@ -1,6 +1,8 @@
 require "player"
 require "game"
 require "gworld"
+require "crystal"
+require "crystalmanager"
 
 iceConfig = {
     left = "left",
@@ -44,11 +46,15 @@ function love.load()
     GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
     FirePlayer = Player:new(fireConfig)
+    IceCrystalManager = CrystalManager:new("Ice")
+    FireCrystalManager = CrystalManager:new("Fire")
 end
 
 function love.update(dt)
     IcePlayer:update(dt)
     FirePlayer:update(dt)
+    IceCrystalManager:update(dt)
+    FireCrystalManager:update(dt)
     GameWorld.world:update(dt)
 end
 
@@ -57,6 +63,8 @@ function love.draw()
     IcePlayer:draw()
     FirePlayer:draw()
     GameWorld.world:draw()
+    IceCrystalManager:draw()
+    FireCrystalManager:draw()
     Game:draw()
 end
 
