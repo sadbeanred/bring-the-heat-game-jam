@@ -87,9 +87,9 @@ menuConfig = {
     selectButton = "a",
 }
 
-fireBarrelConfig = {
+iceCrystalConfig = {
     audio = {
-        kill = love.audio.newSource("assets/audio/fire-barrel.mp3", "static"),
+        kill = love.audio.newSource("assets/audio/water-barrel.mp3", "static"),
     },
     faction = "Fire",
     sprite = "assets/ice_crystal.png",
@@ -110,9 +110,9 @@ fireBarrelConfig = {
     }
 }
 
-waterBarrelConfig = {
+fireBarrelConfig = {
     audio = {
-        kill = love.audio.newSource("assets/audio/water-barrel.mp3", "static"),
+        kill = love.audio.newSource("assets/audio/fire-barrel.mp3", "static"),
     },
     sprite = "assets/explosive_barrel.png",
     faction = "Ice",
@@ -137,7 +137,7 @@ IcePlayer = {}
 FirePlayer = {}
 GameWorld = {}
 Entities = {}
-Explosion = require("effets.explosion")
+Explosion = require("effects.explosion")
 
 Explosions = {}
 
@@ -150,7 +150,7 @@ function love.load()
     GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
     FirePlayer = Player:new(fireConfig)
-    IceCrystalManager = CrystalManager:new(waterBarrelConfig)
+    IceCrystalManager = CrystalManager:new(iceCrystalConfig)
     FireCrystalManager = CrystalManager:new(fireBarrelConfig)
     backgroundMusic = love.audio.newSource("assets/audio/bgm.mp3", "stream")
     Game:load()
@@ -188,7 +188,6 @@ function love.draw()
     if State.current == "Game" then
         IcePlayer:draw()
         FirePlayer:draw()
-        -- GameWorld.world:draw()
         GameWorld:draw()
         IceCrystalManager:draw()
         FireCrystalManager:draw()
@@ -206,16 +205,10 @@ function love.keypressed(key)
     if key == "escape" then
         love.event.quit(0)
     end
-    if State.current == "Game" then
-        if IcePlayer then
-            IcePlayer:keypressed(key)
-        end
-        if FirePlayer then
-            FirePlayer:keypressed(key)
-        end
-    elseif State.current == "Menu" then
+    if State.current == "Menu" then
         Menu:keypressed(key)
     elseif State.current == "GameOver" then
         GameOver:keypressed(key)
+
     end
 end

@@ -160,15 +160,6 @@ function Player:tryShoot(dt)
     end
 end
 
-function Player:keypressed(key)
-    -- if key == self.config.shoot then
-    --     self:tryShoot()
-    --     local px, py = self.collider:getPosition()
-    --     local bullet = Bullet:new(self, px, py, self.facing.x, self.facing.y)
-    --     table.insert(self.bullets, bullet)
-    -- end
-end
-
 function Player:kill()
     if not self:isInvulnerable() then
         self.config.audio.death:clone():play()

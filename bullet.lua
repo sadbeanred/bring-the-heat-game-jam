@@ -52,6 +52,9 @@ function Bullet:update(dt)
 end
 
 function Bullet:draw()
+    if(self.collider == nil or self.collider:isDestroyed()) then
+        return
+    end
     local px, py = self.collider:getPosition()
     love.graphics.push("all")
     if self.from.config.name == "Fire" then
