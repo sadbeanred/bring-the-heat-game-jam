@@ -45,8 +45,8 @@ function Player:manageGamepadInputs(dt)
     local px, py = self.collider:getLinearVelocity()
     local joysticks = love.joystick.getJoysticks()
     
-    if #joysticks > self.config.gpIndex and joysticks[self.config.gpIndex]:isGamepad() then
-        local joystick = joysticks[self.config.gpIndex]
+    if #joysticks >= self.config.gamepadIndex and joysticks[self.config.gamepadIndex]:isGamepad() then
+        local joystick = joysticks[self.config.gamepadIndex]
         local axisX = joystick:getGamepadAxis(self.config.joystickLeft)
         local axisY = joystick:getGamepadAxis(self.config.joystickUp)
         local lookX = joystick:getGamepadAxis(self.config.lookLeft)
@@ -99,6 +99,7 @@ function Player:updateBullets(dt)
             bullet:update(dt)
 
             if (bullet.collider:isDestroyed()) then
+                self.config.audio.miss:clone():play()
                 table.insert(removableItems, i)
             end
         end
@@ -159,11 +160,13 @@ function Player:keypressed(key)
         local px, py = self.collider:getPosition()
         local bullet = Bullet:new(self, px, py, self.facing.x, self.facing.y)
         table.insert(self.bullets, bullet)
+        self.config.audio.shoot[math.random(#self.config.audio.shoot)]:clone():play()
     end
 end
 
 function Player:kill()
     if not self:isInvulnerable() then
+        self.config.audio.death:clone():play()
         self:respawn()
         return true
     end

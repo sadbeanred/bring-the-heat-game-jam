@@ -27,7 +27,17 @@ iceConfig = {
     shootButton = "triggerright",
     jumpButton = "leftshoulder",
     sprintButton = "rightshoulder",
-    gpIndex = 1
+    gamepadIndex = 1,
+    audio = {
+        shoot = {
+            love.audio.newSource("audio/ice-shoot-1.mp3", "static"),
+            love.audio.newSource("audio/ice-shoot-2.mp3", "static")
+        },
+        jump = love.audio.newSource("audio/jump.mp3", "static"),
+        land = love.audio.newSource("audio/land.mp3", "static"),
+        death = love.audio.newSource("audio/ice-death.mp3", "static"),
+        miss = love.audio.newSource("audio/ice-miss.mp3", "static"),
+    }
 }
 
 fireConfig = {
@@ -49,7 +59,17 @@ fireConfig = {
     shootButton = "triggerright",
     jumpButton = "leftshoulder",
     sprintButton = "rightshoulder",
-    gpIndex = 2
+    gamepadIndex = 2,
+    audio = {
+        shoot = {
+            love.audio.newSource("audio/fire-shoot-1.mp3", "static"),
+            love.audio.newSource("audio/fire-shoot-2.mp3", "static")
+        },
+        jump = love.audio.newSource("audio/jump.mp3", "static"),
+        land = love.audio.newSource("audio/land.mp3", "static"),
+        death = love.audio.newSource("audio/fire-death.mp3", "static"),
+        miss = love.audio.newSource("audio/fire-miss.mp3", "static"),
+    }
 }
 
 menuConfig = {
@@ -60,6 +80,50 @@ menuConfig = {
     downButton = "dpdown",
     yAxis = "lefty",
     selectButton = "a",
+}
+
+fireBarrelConfig = {
+    audio = {
+        kill = love.audio.newSource("audio/fire-barrel.mp3", "static"),
+    },
+    faction = "Fire",
+    color = {1, 0, 0},
+    spawnLocations = {
+        {
+            x= ((WindowWidth-GroundWidth)/4) + (CrystalSides/2),
+            y = WindowHeight - (GroundHeight/1.5) - 50
+        },
+        {
+            x = (CloseSideWallMargin/2) - (CrystalSides/2),
+            y = WindowHeight - (JumpHeight*1.75) + WallHeight * .5 - (CrystalSides/2)
+        },
+        {
+            x = WallWidth * 2 - (CrystalSides/2),
+            y = WindowHeight - (JumpHeight * 2.6) - (CrystalSides/2)
+        }
+    }
+}
+
+waterBarrelConfig = {
+    audio = {
+        kill = love.audio.newSource("audio/water-barrel.mp3", "static"),
+    },
+    faction = "Ice",
+    color = {0, 0, 1},
+    spawnLocations = {
+        {
+            x = (WindowWidth - ((WindowWidth-GroundWidth)/3)) - (CrystalSides/2),
+            y =WindowHeight - (GroundHeight/1.5) - 50
+        },
+        {
+            x = WindowWidth - (CloseSideWallMargin/2) - (CrystalSides/2),
+            y = WindowHeight - (JumpHeight*1.75) + WallHeight * .5 - (CrystalSides/2)
+        },
+        {
+            x = WindowWidth - (WallWidth * 2) - (CrystalSides/2),
+            y = WindowHeight - (JumpHeight * 2.6) - (CrystalSides/2)
+        }
+    }
 }
 
 IcePlayer = {}
@@ -75,8 +139,9 @@ function love.load()
     GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
     FirePlayer = Player:new(fireConfig)
-    IceCrystalManager = CrystalManager:new("Ice")
-    FireCrystalManager = CrystalManager:new("Fire")
+    IceCrystalManager = CrystalManager:new(waterBarrelConfig)
+    FireCrystalManager = CrystalManager:new(fireBarrelConfig)
+    backgroundMusic = love.audio.newSource("audio/bgm.mp3", "stream")
     Game:load()
 end
 
@@ -93,6 +158,10 @@ function love.update(dt)
         GameWorld.world:update(dt)
         IceCrystalManager:update(dt)
         FireCrystalManager:update(dt)
+    end
+    if not backgroundMusic:isPlaying() then
+        backgroundMusic:setVolume(0.8)
+        backgroundMusic:play()
     end
 end
 
