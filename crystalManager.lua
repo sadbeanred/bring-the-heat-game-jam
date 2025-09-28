@@ -61,7 +61,7 @@ end
 function CrystalManager:spawnCrystal()
     local availableLocations = {}
     for i, location in ipairs(self.config.spawnLocations) do
-        if next(GameWorld.world:queryRectangleArea(location.x, location.y, CrystalSides, CrystalSides, {"Crystal"})) == nil then
+        if next(GameWorld.world:queryRectangleArea(location.x, location.y, CrystalSides, CrystalSides, {"IceCrystal", "FireCrystal"})) == nil then
             table.insert(availableLocations, location)
         end
     end

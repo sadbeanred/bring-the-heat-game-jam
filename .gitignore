@@ -1,3 +1,4 @@
 .exrc
 dist
 node_modules
+game.love
