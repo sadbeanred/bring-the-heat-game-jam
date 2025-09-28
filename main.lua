@@ -5,6 +5,7 @@ require "gworld"
 require "menu"
 require "crystal"
 require "crystalManager"
+Screen = require "lib.shack.shack"
 
 joystick = love.joystick.getJoysticks()[1]
 
@@ -13,9 +14,34 @@ iceConfig = {
     up = "up",
     down = "down",
     right = "right",
+    start_facing = { x = -1, y = 0 },
     name = "Ice",
     shoot = "return",
+    spawn = {
+        x = WindowWidth - 100 - 40,
+        y = 300,
+    },
     colour = { 0, 0, 1 },
+    joystickUp = "lefty",
+    joystickLeft = "leftx",
+    lookUp = "righty",
+    lookLeft = "rightx",
+    shootButton = "triggerright",
+    jumpButton = "leftshoulder",
+    sprintButton = "rightshoulder",
+    gpIndex = 1,
+    sprite = "assets/ice_cube.png"
+}
+
+fireConfig = {
+    up = "w",
+    left = "a",
+    down = "s",
+    right = "d",
+    start_facing = { x = 1, y = 0 },
+    name = "Fire",
+    shoot = "space",
+    colour = { 1, 0, 0 },
     spawn = {
         x = 100,
         y = 300,
@@ -27,29 +53,8 @@ iceConfig = {
     shootButton = "triggerright",
     jumpButton = "leftshoulder",
     sprintButton = "rightshoulder",
-    gpIndex = 1
-}
-
-fireConfig = {
-    up = "w",
-    left = "a",
-    down = "s",
-    right = "d",
-    name = "Fire",
-    shoot = "space",
-    colour = { 1, 0, 0 },
-    spawn = {
-        x = WindowWidth - 100 - 40,
-        y = 300,
-    },
-    joystickUp = "lefty",
-    joystickLeft = "leftx",
-    lookUp = "righty",
-    lookLeft = "rightx",
-    shootButton = "triggerright",
-    jumpButton = "leftshoulder",
-    sprintButton = "rightshoulder",
-    gpIndex = 2
+    gpIndex = 2,
+    sprite = "assets/magma_cube.png"
 }
 
 menuConfig = {
@@ -71,6 +76,7 @@ Entities = {}
 
 
 function love.load()
+    Screen:setShake(20)
 
     GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
@@ -88,6 +94,7 @@ function love.update(dt)
         GameOver:update(dt)
     end
     if State.current == "Game" then
+        Screen:update(dt)
         IcePlayer:update(dt)
         FirePlayer:update(dt)
         GameWorld.world:update(dt)
@@ -100,9 +107,11 @@ function love.draw()
     if State.current == "Game" then
         IcePlayer:draw()
         FirePlayer:draw()
-        GameWorld.world:draw()
+        -- GameWorld.world:draw()
+        GameWorld:draw()
         IceCrystalManager:draw()
         FireCrystalManager:draw()
+        Screen:apply()
         Game:draw()
     elseif State.current == "Menu" then
         Menu:draw()

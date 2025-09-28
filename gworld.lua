@@ -12,6 +12,9 @@ WallWidth = 200
 SmallWallWidth = 75
 CloseSideWallMargin = 100
 
+
+local drawables =  {}
+
 function GWorld:new()
     local wf = require "lib/windfield"
     local obj = setmetatable({}, self)
@@ -55,6 +58,7 @@ end
 function addKillField(world, x, y, width, height)
     local obj = world:newRectangleCollider(x, y, width, height)
     obj:setType("static")
+    table.insert(drawables,{"kill", x,y, width, height})
     obj:setCollisionClass("KillField")
 
     return obj
@@ -68,6 +72,7 @@ end
 
 function addStaticObject(world, x, y, width, height)
     local obj = world:newRectangleCollider(x, y, width, height)
+    table.insert(drawables,{"wall", x,y, width, height})
     obj:setCollisionClass('Terrain')
     obj:setType("static")
     return obj
@@ -81,16 +86,35 @@ end
 
 function addEnergyField(world, x1, y1, x2, y2)
     local obj = world:newLineCollider(x1, y1, x2, y2)
+    table.insert(drawables,{"energy", x1,y1,x2, y2})
     obj:setType("static")
     obj:setCollisionClass('EnergyField')
     return obj
+end
+
+function GWorld:draw()
+    for i, item in ipairs(drawables) do
+        local type, x, y, x1, y1 = unpack(item)
+        print(type)
+        if type == "wall" then
+            love.graphics.push("all")
+            love.graphics.setColor(1,1,1)
+
+            love.graphics.rectangle("line", x, y, x1,y1)
+            love.graphics.pop()
+        end
+        if type == "energy" then
+            love.graphics.setColor(.2,.2,1)
+            love.graphics.line( x, y, x1,y1)
+        end
+    end
 end
 
 function addCollisionClasses(world)
     world:addCollisionClass('FirePlayer')
     world:addCollisionClass('Terrain')
     world:addCollisionClass('IcePlayer', { ignores = { 'FirePlayer' } })
-    world:addCollisionClass('FireBullet', { ignores = { 'FirePlayer' } })
+    world:addCollisionClass('FireBullet', { ignores = { 'FirePlayer'} })
     world:addCollisionClass('IceBullet', { ignores = { 'IcePlayer' } })
     world:addCollisionClass('EnergyField', { ignores = { 'FirePlayer', 'IcePlayer' } })
     world:addCollisionClass('KillField', { ignores = { 'FirePlayer', 'IcePlayer' } })
