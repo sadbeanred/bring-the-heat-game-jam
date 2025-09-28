@@ -95,7 +95,6 @@ end
 function GWorld:draw()
     for i, item in ipairs(drawables) do
         local type, x, y, x1, y1 = unpack(item)
-        print(type)
         if type == "wall" then
             love.graphics.push("all")
             love.graphics.setColor(1,1,1)

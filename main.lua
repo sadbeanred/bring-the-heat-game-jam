@@ -71,6 +71,9 @@ IcePlayer = {}
 FirePlayer = {}
 GameWorld = {}
 Entities = {}
+local Explosion = require("effets.explosion")
+
+local explosions = {}
 
 
 
@@ -84,6 +87,8 @@ function love.load()
     IceCrystalManager = CrystalManager:new("Ice", "assets/explosive_barrel.png")
     FireCrystalManager = CrystalManager:new("Fire", "assets/ice_crystal.png")
     Game:load()
+
+    Explosion.load()
 end
 
 function love.update(dt)
@@ -100,6 +105,11 @@ function love.update(dt)
         GameWorld.world:update(dt)
         IceCrystalManager:update(dt)
         FireCrystalManager:update(dt)
+        for i = #explosions, 1, -1 do
+            local e = explosions[i]
+            e:update(dt)
+            if e:isDead() then table.remove(explosions, i) end
+        end
     end
 end
 
