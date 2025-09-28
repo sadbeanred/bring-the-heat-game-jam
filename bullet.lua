@@ -2,13 +2,15 @@ require "game"
 Bullet = {}
 Bullet.__index = Bullet
 
-BULLET_SPEED = 500
+BULLET_SPEED = 100
+local BULLET_SIZE = 6
 
 
 function Bullet:new(from, x, y, xd, yd)
     local bullet = setmetatable({}, self)
-    bullet.collider = GameWorld.world:newCircleCollider(x, y, 5)
+    bullet.collider = GameWorld.world:newCircleCollider(x, y, BULLET_SIZE)
     bullet.collider:setMass(.1)
+    bullet.collider:setGravityScale(.01)
     bullet.collider:applyLinearImpulse(BULLET_SPEED * xd, BULLET_SPEED * yd)
     bullet.collider:setCollisionClass(from.config.name .. "Bullet")
     bullet.from = from
@@ -38,8 +40,20 @@ function Bullet:update(dt)
     end
 
     if self.collider:enter("EnergyField") or
-        self.collider:enter("Terrain") then
+        self.collider:enter("Terrain")
+    then
         self.collider:destroy()
-        table.remove(self.from.bullets, 1)
     end
+end
+
+function Bullet:draw()
+    local px, py = self.collider:getPosition()
+    love.graphics.push("all")
+    if self.from.config.name == "Fire" then
+        love.graphics.setColor(1,.2,.2)
+    else
+        love.graphics.setColor(.2,.2,1)
+    end
+    love.graphics.circle("fill", px, py, BULLET_SIZE)
+    love.graphics.pop()
 end

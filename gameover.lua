@@ -8,7 +8,7 @@ GameOver.items = {
         end,
     },
     {
-        text = "Back to Menu",
+        text = "Quit",
         func = function()
             love.event.quit(0)
             Temperature = 0
