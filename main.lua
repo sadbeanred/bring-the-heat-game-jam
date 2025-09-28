@@ -92,7 +92,7 @@ fireBarrelConfig = {
         kill = love.audio.newSource("assets/audio/fire-barrel.mp3", "static"),
     },
     faction = "Fire",
-    sprite = "assets/explosive_barrel.png.png",
+    sprite = "assets/ice_crystal.png",
     color = {1, 0, 0},
     spawnLocations = {
         {
@@ -114,7 +114,7 @@ waterBarrelConfig = {
     audio = {
         kill = love.audio.newSource("assets/audio/water-barrel.mp3", "static"),
     },
-    sprite = "assets/ice_crystal.png",
+    sprite = "assets/explosive_barrel.png",
     faction = "Ice",
     color = {0, 0, 1},
     spawnLocations = {
@@ -150,14 +150,9 @@ function love.load()
     GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
     FirePlayer = Player:new(fireConfig)
-<<<<<<< HEAD
-    IceCrystalManager = CrystalManager:new("Ice", "assets/explosive_barrel.png")
-    FireCrystalManager = CrystalManager:new("Fire", "assets/ice_crystal.png")
-=======
     IceCrystalManager = CrystalManager:new(waterBarrelConfig)
     FireCrystalManager = CrystalManager:new(fireBarrelConfig)
     backgroundMusic = love.audio.newSource("assets/audio/bgm.mp3", "stream")
->>>>>>> main
     Game:load()
 
     Explosion.load()
