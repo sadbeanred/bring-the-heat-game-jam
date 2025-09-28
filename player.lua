@@ -203,7 +203,9 @@ function Player:draw()
     if self:isInvulnerable() then
         love.graphics.push("all")
         love.graphics.setColor(0, 0, .8, .3)
-        love.graphics.circle("fill", px, py, self.size.x)
+        love.graphics.circle("fill", px-4, py, self.size.x)
+        love.graphics.setColor(0, 0, .8, .8)
+        love.graphics.circle("line", px-4, py, self.size.x)
         love.graphics.pop()
     end
     for _, bullet in ipairs(self.bullets) do

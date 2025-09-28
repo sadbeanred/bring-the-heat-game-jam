@@ -79,7 +79,7 @@ function Thermo:draw()
 
   -- value label near bulb
   love.graphics.setColor(1,1,1)
-  love.graphics.printf(string.format("%d", math.floor(self.value)),
+  love.graphics.printf(string.format("%d°", math.floor(self.value)),
     bulbX + self.r + 8, self.y - 8, 80, "left")
 end
 

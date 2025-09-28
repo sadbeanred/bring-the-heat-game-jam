@@ -50,10 +50,5 @@ function DestroyCrystal(faction)
 end
 
 function Game:draw()
-    love.graphics.push("all")
-    love.graphics.setFont(love.graphics.newFont(24))
-    love.graphics.print(Temperature, 100, 100)
-    love.graphics.setColor(1, 1, 1)
     gauge:draw()
-    love.graphics.pop()
 end
