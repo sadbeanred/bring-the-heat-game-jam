@@ -4,12 +4,13 @@ Bullet = {
 }
 Bullet.__index = Bullet
 
-BULLET_SPEED = 1000
+BULLET_SPEED = 500
 
 
 function Bullet:new(from, x, y, xd, yd)
     local bullet = setmetatable({}, self)
-    bullet.collider = GameWorld.world:newCircleCollider(x, y, 10)
+    bullet.collider = GameWorld.world:newCircleCollider(x, y, 5)
+    bullet.collider:setMass(.1)
     bullet.collider:applyLinearImpulse(BULLET_SPEED * xd, BULLET_SPEED * yd)
     bullet.collider:setCollisionClass(from.config.name .. "Bullet")
     bullet.from = from
@@ -27,5 +28,10 @@ function Bullet:update(dt)
         local collision_data = self.collider:getEnterCollisionData('FirePlayer')
         self.collider:destroy()
         KillPlayer(collision_data.collider:getObject())
+    end
+
+    if self.collider:enter("EnergyField") or
+        self.collider:enter("Terrain") then
+        self.collider:destroy()
     end
 end

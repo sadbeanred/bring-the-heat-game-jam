@@ -34,7 +34,7 @@ function Player:update(dt)
         self.collider:applyLinearImpulse(1000, 0)
     end
     if love.keyboard.isDown(self.config.up) and py == 0 then
-        self.facing.y = 1
+        -- self.facing.y = 1
         self.collider:applyLinearImpulse(0, -5000)
     end
 
@@ -43,7 +43,17 @@ function Player:update(dt)
             bullet:update(dt)
         end
     end
+    self:handleCollision()
+
 end
+
+function Player:handleCollision()
+    if self.collider:enter("KillField") then
+        self:respawn()
+
+    end
+end
+
 
 function Player:keypressed(key)
     if key == self.config.shoot then
