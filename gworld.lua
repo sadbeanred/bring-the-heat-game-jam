@@ -23,14 +23,13 @@ function GWorld:new()
 
     addCollisionClasses(obj.world)
 
-    obj.leftBoundary                          = addStaticObject(obj.world, 0, 0, 1, WindowHeight)
-    obj.rightBoundary                         = addStaticObject(obj.world, WindowWidth - 1, 0, 1, WindowHeight)
-    obj.topBoundary                           = addStaticObject(obj.world, 0, 0, WindowWidth, 1)
-    -- obj.bottomBoundary = addStaticObject(obj.world, 0, WindowHeight-1, WindowWidth, 1)
+    obj.leftBoundary                          = addStaticObject(obj.world, 0, 0, 1, WindowHeight, false)
+    obj.rightBoundary                         = addStaticObject(obj.world, WindowWidth - 1, 0, 1, WindowHeight, false)
+    obj.topBoundary                           = addStaticObject(obj.world, 0, 0, WindowWidth, 1, false)
     obj.ground                                = addStaticObject(obj.world, (WindowWidth - GroundWidth) / 2,
-        WindowHeight - GroundHeight, GroundWidth, GroundHeight)
+        WindowHeight - GroundHeight, GroundWidth, GroundHeight, false)
     obj.centreWall                            = addStaticObject(obj.world, (WindowWidth - WallWidth * 1.5) / 2,
-        WindowHeight - JumpHeight, WallWidth * 1.5, WallHeight)
+        WindowHeight - JumpHeight, WallWidth * 1.5, WallHeight, true)
 
     obj.leftMarginWall, obj.rightMarginWall   = addMirroredWalls(obj.world, CloseSideWallMargin,
         WindowHeight - (JumpHeight * 1.75), WallWidth, WallHeight)
@@ -65,16 +64,25 @@ function addKillField(world, x, y, width, height)
 end
 
 function addMirroredWalls(world, x, y, width, height)
-    local leftWall = addStaticObject(world, x, y, width, height)
-    local rightWall = addStaticObject(world, WindowWidth - x - width, y, width, height)
+    local leftWall = addStaticObject(world, x, y, width, height, true)
+    local rightWall = addStaticObject(world, WindowWidth - x - width, y, width, height, true)
     return leftWall, rightWall
 end
 
-function addStaticObject(world, x, y, width, height)
+function addStaticObject(world, x, y, width, height, oneWay)
     local obj = world:newRectangleCollider(x, y, width, height)
     table.insert(drawables,{"wall", x,y, width, height})
     obj:setCollisionClass('Terrain')
     obj:setType("static")
+    if oneWay then
+        obj:setPreSolve(function(collider_1, collider_2, contact)
+            local px, py = collider_1:getPosition()
+            local ox, oy = collider_2:getPosition()
+            if py < oy then
+                contact:setEnabled(false)
+            end
+        end)
+    end
     return obj
 end
 

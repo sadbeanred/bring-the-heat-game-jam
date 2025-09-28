@@ -12,11 +12,12 @@ RESPAWN_INVULNERABILITY_TIME = 1
 XAcceleration = 50
 XMaxSpeed = 300
 LeftXDeadZone = 0.3
-RightXDeadZone = 0.5
-LeftYDeadZone = 0.3
-RightYDeadZone = 0.5
-YAcceleration = 150
+AimXDeadZone = 0.5
+LeftYDeadZone = 0.5
+AimYDeadZone = 0.6
+YAcceleration = 6000
 SprintFactor = 2
+JumpDelay = 0.01
 
 function Player:new(config)
     local obj = setmetatable({}, self)
@@ -36,12 +37,13 @@ function Player:new(config)
 end
 
 function Player:update(dt)
+    self.jumpCooldown = self.jumpCooldown + dt
     self.shootCooldown = self.shootCooldown + dt
     self.invulnerableTime = math.max(self.invulnerableTime - dt, 0)
     self:manageGamepadInputs(dt)
     self:manageKeyboardInputs()
     self:updateBullets(dt)
-    self:handleCollision()
+    self:handleCollision(dt)
 end
 
 function Player:manageGamepadInputs(dt)
@@ -51,9 +53,8 @@ function Player:manageGamepadInputs(dt)
     if #joysticks >= self.config.gamepadIndex and joysticks[self.config.gamepadIndex]:isGamepad() then
         local joystick = joysticks[self.config.gamepadIndex]
         local axisX = joystick:getGamepadAxis(self.config.joystickLeft)
-        local axisY = joystick:getGamepadAxis(self.config.joystickUp)
-        local lookX = joystick:getGamepadAxis(self.config.lookLeft)
-        local lookY = joystick:getGamepadAxis(self.config.lookUp)
+        local lookX = joystick:getGamepadAxis(self.config.joystickLeft)
+        local lookY = joystick:getGamepadAxis(self.config.joystickUp)
         local axisTrigger = joystick:getGamepadAxis(self.config.shootButton)
         local jumpButtonPressed = joystick:isGamepadDown(self.config.jumpButton)
 
@@ -63,23 +64,25 @@ function Player:manageGamepadInputs(dt)
         if axisX < -1 * LeftXDeadZone then
             self:tryMoveHorizontal(axisX, joystick:isGamepadDown(self.config.sprintButton))
         end
-        if axisY < -1 * LeftYDeadZone then
-            self:tryJump(axisY, dt)
-        end
-        if math.abs(lookX) > RightXDeadZone or math.abs(lookY) > RightYDeadZone then
+        if math.abs(lookX) > AimXDeadZone then
             self.facing.x = lookX
-            self.facing.y = lookY
+        end
+        if lookY < 0 then
+           self.facing.y = math.ceil(lookY - AimYDeadZone)
+        end
+        if lookY > 0 then
+            self.facing.y = math.floor(lookY + AimYDeadZone)
         end
         if jumpButtonPressed and py == 0 then
-            self.collider:applyLinearImpulse(0, -5000)
+            self:tryJump(-1)
         end
 
         if axisTrigger > 0.5 then
-            self:tryShoot(dt)
+            self:tryShoot()
         end
     else
         if love.keyboard.isDown(self.config.shoot) then
-            self:tryShoot(dt)
+            self:tryShoot()
         end
     end
 end
@@ -114,7 +117,7 @@ function Player:updateBullets(dt)
     for _, i in ipairs(removableItems) do
         table.remove(self.bullets, i)
     end
-    self:handleCollision()
+    self:handleCollision(dt)
 end
 
 function Player:tryMoveHorizontal(movementAmount, isSprinting)
@@ -126,12 +129,13 @@ function Player:tryMoveHorizontal(movementAmount, isSprinting)
     end
 end
 
-function Player:tryJump(movementAmount, dt)
+function Player:tryJump(movementAmount)
     if self.onGround then
-        self.jumpCooldown = self.jumpCooldown + dt
-        if self.jumpCooldown < 0.1 then
-            self.collider:applyLinearImpulse(0, movementAmount * YAcceleration * dt * 500)
-        else
+        print "on ground"
+        if self.jumpCooldown > JumpDelay then
+            print "jump cooldown is good "
+            self.collider:applyLinearImpulse(0, movementAmount * YAcceleration)
+            print "jump cooldown reset"
             self.onGround = false
             self.jumpCooldown = 0
         end
@@ -146,10 +150,14 @@ function Player:handleCollision()
     end
     if self.collider:enter("Terrain") then
         self.onGround = true
+        local joystick = love.joystick.getJoysticks()[self.config.gamepadIndex]
+        if joystick:isGamepadDown(self.config.jumpButton) then
+            self:tryJump(-0.2 )
+        end
     end
 end
 
-function Player:tryShoot(dt)
+function Player:tryShoot()
     if self.shootCooldown > .25 then
         local px, py = self.collider:getPosition()
 
@@ -181,7 +189,6 @@ end
 
 function Player:draw()
     love.graphics.push("all")
-    -- love.graphics.setColor(unpack(self.config.colour))
     love.graphics.setColor(1, 1, 1)
     local px, py = self.collider:getPosition()
     local drawCenter = { x = px - (self.size.x / 2), y = py - (self.size.y / 2) }
@@ -197,7 +204,6 @@ function Player:draw()
         self.sprite:getHeight() / 2
     )
 
-    -- love.graphics.rectangle("fill", drawCenter.x, drawCenter.y, self.size.x, self.size.y)
     love.graphics.pop()
 
     if self:isInvulnerable() then

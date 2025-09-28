@@ -23,7 +23,6 @@ end
 
 function Crystal:draw()
     local px, py = self.collider:getPosition()
-    -- love.graphics.setColor(self.faction == "Fire" and {1, 0, 0} or {0, 0, 1})
     local x = px
     local y = py
     love.graphics.push("all")
@@ -31,5 +30,4 @@ function Crystal:draw()
 
     love.graphics.draw(self.sprite, x, y, 0, .1, .1, self.sprite:getWidth() / 2, self.sprite:getHeight() / 2)
     love.graphics.pop()
-    -- love.graphics.rectangle("fill", px - (CrystalSides / 2) + .5, py - (CrystalSides / 2) -.1, CrystalSides-.5,  CrystalSides-.5, CrystalCornerRadius*1.75)
 end

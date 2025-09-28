@@ -22,6 +22,9 @@ end
 function Bullet:update(dt)
     self.lifetime = self.lifetime + dt
 
+    if (self.collider == nil or self.collider:isDestroyed()) then
+        return
+    end
     local px, py = self.collider:getPosition()
     if self.collider:enter("IcePlayer") and self.from.config.name == "Fire" then
         local collision_data = self.collider:getEnterCollisionData('IcePlayer')

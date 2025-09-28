@@ -40,6 +40,23 @@ function Menu:draw()
         end
         love.graphics.print(item.text, 100, 100 + i * 30)
     end
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(love.graphics.newFont(48))
+    love.graphics.print("Global Warming", 50, 50)
+    love.graphics.setColor(0, 0, 1)
+    love.graphics.setFont(love.graphics.newFont(16))
+    love.graphics.print("Ice Cube is doing everything in his power to freeze the planet, while Fire Square works to melt it.", 60, 270)
+    love.graphics.print("See how the climate reacts to these two forces of nature!", 60, 300)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(love.graphics.newFont(12))
+    love.graphics.print("Use the joystick or arrow keys to navigate, and space or A to select", 50, WindowHeight - 400)
+    love.graphics.print("Controls:", 50, WindowHeight - 180)
+    love.graphics.print("Use Left Stick to move, A to jump, Right Trigger to shoot, Right Bumper to sprint", 50, WindowHeight - 160)
+    love.graphics.print("Fire Square (Red): W/A/S/D to move, Space to shoot", 50, WindowHeight - 140)
+    love.graphics.print("Ice Cube (Blue): Arrow Keys to move, Enter to shoot", 50, WindowHeight - 120)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(love.graphics.newFont(24))
+
 end
 
 function Menu:update(dt)
