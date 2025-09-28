@@ -5,12 +5,12 @@ Explosion.__index = Explosion
 local circle
 
 local function makeCircle(r)
-  local c = love.graphics.newCanvas(r*2, r*2)
+  local c = love.graphics.newCanvas(r * 2, r * 2)
   love.graphics.push("all")
   love.graphics.setCanvas(c)
-  love.graphics.clear(0,0,0,0)
+  love.graphics.clear(0, 0, 0, 0)
   love.graphics.setBlendMode("alpha", "premultiplied")
-  love.graphics.setColor(1,1,1,1)
+  love.graphics.setColor(1, 1, 1, 1)
   love.graphics.circle("fill", r, r, r)
   love.graphics.setCanvas()
   love.graphics.pop()
@@ -33,24 +33,23 @@ function Explosion.new(x, y, opts)
   ps:setLinearDamping(2, 5)
   ps:setSizes(1.0, 0.4, 0.1)
   ps:setSizeVariation(1)
-  ps:setRotation(0, math.pi*2)
+  ps:setRotation(0, math.pi * 2)
   ps:setSpin(0, 10)
   ps:setSpinVariation(1)
   ps:setRadialAcceleration(-200, -50)
   ps:setTangentialAcceleration(-60, 60)
   ps:setPosition(x, y)
 
-  local r,g,b = opts.r or 1, opts.g or 0.6, opts.b or 0.1
+  local r, g, b = opts.r or 1, opts.g or 0.6, opts.b or 0.1
   ps:setColors(
-    r, g, b, 1.0,         -- start
-    r, g*0.6, b*0.3, 0.8, -- mid flame
-    0.5, 0.5, 0.5, 0.4,   -- smoke
-    0.2, 0.2, 0.2, 0.0    -- fade out
+    {r, g, b,},
+    {r*.8, g*.8, b*.8,},
+    {r*.4, g*.4, b*.4}
   )
 
   ps:emit(opts.count or 120)
 
-  local e = setmetatable({ps = ps}, Explosion)
+  local e = setmetatable({ ps = ps }, Explosion)
   return e
 end
 
@@ -59,7 +58,11 @@ function Explosion:update(dt)
 end
 
 function Explosion:draw()
+
+  love.graphics.push("all")
+  love.graphics.setColor(1,1,1,1)
   love.graphics.draw(self.ps)
+  love.graphics.pop()
 end
 
 function Explosion:isDead()
@@ -67,4 +70,3 @@ function Explosion:isDead()
 end
 
 return Explosion
-

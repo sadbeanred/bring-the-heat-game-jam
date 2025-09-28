@@ -93,19 +93,19 @@ fireBarrelConfig = {
     },
     faction = "Fire",
     sprite = "assets/ice_crystal.png",
-    color = {1, 0, 0},
+    color = { 1, 0, 0 },
     spawnLocations = {
         {
-            x= ((WindowWidth-GroundWidth)/4) + (CrystalSides/2),
-            y = WindowHeight - (GroundHeight/1.5) - 50
+            x = ((WindowWidth - GroundWidth) / 4) + (CrystalSides / 2),
+            y = WindowHeight - (GroundHeight / 1.5) - 50
         },
         {
-            x = (CloseSideWallMargin/2) - (CrystalSides/2),
-            y = WindowHeight - (JumpHeight*1.75) + WallHeight * .5 - (CrystalSides/2)
+            x = (CloseSideWallMargin / 2) - (CrystalSides / 2),
+            y = WindowHeight - (JumpHeight * 1.75) + WallHeight * .5 - (CrystalSides / 2)
         },
         {
-            x = WallWidth * 2 - (CrystalSides/2),
-            y = WindowHeight - (JumpHeight * 2.6) - (CrystalSides/2)
+            x = WallWidth * 2 - (CrystalSides / 2),
+            y = WindowHeight - (JumpHeight * 2.6) - (CrystalSides / 2)
         }
     }
 }
@@ -116,19 +116,19 @@ waterBarrelConfig = {
     },
     sprite = "assets/explosive_barrel.png",
     faction = "Ice",
-    color = {0, 0, 1},
+    color = { 0, 0, 1 },
     spawnLocations = {
         {
-            x = (WindowWidth - ((WindowWidth-GroundWidth)/3)) - (CrystalSides/2),
-            y =WindowHeight - (GroundHeight/1.5) - 50
+            x = (WindowWidth - ((WindowWidth - GroundWidth) / 3)) - (CrystalSides / 2),
+            y = WindowHeight - (GroundHeight / 1.5) - 50
         },
         {
-            x = WindowWidth - (CloseSideWallMargin/2) - (CrystalSides/2),
-            y = WindowHeight - (JumpHeight*1.75) + WallHeight * .5 - (CrystalSides/2)
+            x = WindowWidth - (CloseSideWallMargin / 2) - (CrystalSides / 2),
+            y = WindowHeight - (JumpHeight * 1.75) + WallHeight * .5 - (CrystalSides / 2)
         },
         {
-            x = WindowWidth - (WallWidth * 2) - (CrystalSides/2),
-            y = WindowHeight - (JumpHeight * 2.6) - (CrystalSides/2)
+            x = WindowWidth - (WallWidth * 2) - (CrystalSides / 2),
+            y = WindowHeight - (JumpHeight * 2.6) - (CrystalSides / 2)
         }
     }
 }
@@ -137,9 +137,9 @@ IcePlayer = {}
 FirePlayer = {}
 GameWorld = {}
 Entities = {}
-local Explosion = require("effets.explosion")
+Explosion = require("effets.explosion")
 
-local explosions = {}
+Explosions = {}
 
 
 
@@ -172,10 +172,10 @@ function love.update(dt)
         GameWorld.world:update(dt)
         IceCrystalManager:update(dt)
         FireCrystalManager:update(dt)
-        for i = #explosions, 1, -1 do
-            local e = explosions[i]
+        for i = #Explosions, 1, -1 do
+            local e = Explosions[i]
             e:update(dt)
-            if e:isDead() then table.remove(explosions, i) end
+            if e:isDead() then table.remove(Explosions, i) end
         end
     end
     if not backgroundMusic:isPlaying() then
@@ -193,6 +193,7 @@ function love.draw()
         IceCrystalManager:draw()
         FireCrystalManager:draw()
         Screen:apply()
+        for _, e in ipairs(Explosions) do e:draw() end
         Game:draw()
     elseif State.current == "Menu" then
         Menu:draw()
@@ -218,4 +219,3 @@ function love.keypressed(key)
         GameOver:keypressed(key)
     end
 end
-

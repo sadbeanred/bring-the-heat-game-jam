@@ -22,14 +22,17 @@ end
 function Bullet:update(dt)
     self.lifetime = self.lifetime + dt
 
+    local px, py = self.collider:getPosition()
     if self.collider:enter("IcePlayer") and self.from.config.name == "Fire" then
         local collision_data = self.collider:getEnterCollisionData('IcePlayer')
+        table.insert(Explosions, Explosion.new(px,py, {r=1,b=0,g=0}))
         self.collider:destroy()
         KillPlayer(collision_data.collider:getObject())
     end
 
     if self.collider:enter("FirePlayer") and self.from.config.name == "Ice" then
         local collision_data = self.collider:getEnterCollisionData('FirePlayer')
+        table.insert(Explosions, Explosion.new(px,py, {r=0,b=1,g=0}))
         self.collider:destroy()
         KillPlayer(collision_data.collider:getObject())
     end
@@ -42,6 +45,8 @@ function Bullet:update(dt)
     if self.collider:enter("EnergyField") or
         self.collider:enter("Terrain")
     then
+
+        table.insert(Explosions, Explosion.new(px,py, {r=.2,b=.2,g=.2}))
         self.collider:destroy()
     end
 end
