@@ -29,7 +29,17 @@ iceConfig = {
     shootButton = "triggerright",
     jumpButton = "leftshoulder",
     sprintButton = "rightshoulder",
-    gpIndex = 1,
+    gamepadIndex = 1,
+    audio = {
+        shoot = {
+            love.audio.newSource("assets/audio/ice-shoot-1.mp3", "static"),
+            love.audio.newSource("assets/audio/ice-shoot-2.mp3", "static")
+        },
+        jump = love.audio.newSource("assets/audio/jump.mp3", "static"),
+        land = love.audio.newSource("assets/audio/land.mp3", "static"),
+        death = love.audio.newSource("assets/audio/ice-death.mp3", "static"),
+        miss = love.audio.newSource("assets/audio/ice-miss.mp3", "static"),
+    },
     sprite = "assets/ice_cube.png"
 }
 
@@ -53,7 +63,17 @@ fireConfig = {
     shootButton = "triggerright",
     jumpButton = "leftshoulder",
     sprintButton = "rightshoulder",
-    gpIndex = 2,
+    gamepadIndex = 2,
+    audio = {
+        shoot = {
+            love.audio.newSource("assets/audio/fire-shoot-1.mp3", "static"),
+            love.audio.newSource("assets/audio/fire-shoot-2.mp3", "static")
+        },
+        jump = love.audio.newSource("assets/audio/jump.mp3", "static"),
+        land = love.audio.newSource("assets/audio/land.mp3", "static"),
+        death = love.audio.newSource("assets/audio/fire-death.mp3", "static"),
+        miss = love.audio.newSource("assets/audio/fire-miss.mp3", "static"),
+    },
     sprite = "assets/magma_cube.png"
 }
 
@@ -65,6 +85,52 @@ menuConfig = {
     downButton = "dpdown",
     yAxis = "lefty",
     selectButton = "a",
+}
+
+fireBarrelConfig = {
+    audio = {
+        kill = love.audio.newSource("assets/audio/fire-barrel.mp3", "static"),
+    },
+    faction = "Fire",
+    sprite = "assets/explosive_barrel.png.png",
+    color = {1, 0, 0},
+    spawnLocations = {
+        {
+            x= ((WindowWidth-GroundWidth)/4) + (CrystalSides/2),
+            y = WindowHeight - (GroundHeight/1.5) - 50
+        },
+        {
+            x = (CloseSideWallMargin/2) - (CrystalSides/2),
+            y = WindowHeight - (JumpHeight*1.75) + WallHeight * .5 - (CrystalSides/2)
+        },
+        {
+            x = WallWidth * 2 - (CrystalSides/2),
+            y = WindowHeight - (JumpHeight * 2.6) - (CrystalSides/2)
+        }
+    }
+}
+
+waterBarrelConfig = {
+    audio = {
+        kill = love.audio.newSource("assets/audio/water-barrel.mp3", "static"),
+    },
+    sprite = "assets/ice_crystal.png",
+    faction = "Ice",
+    color = {0, 0, 1},
+    spawnLocations = {
+        {
+            x = (WindowWidth - ((WindowWidth-GroundWidth)/3)) - (CrystalSides/2),
+            y =WindowHeight - (GroundHeight/1.5) - 50
+        },
+        {
+            x = WindowWidth - (CloseSideWallMargin/2) - (CrystalSides/2),
+            y = WindowHeight - (JumpHeight*1.75) + WallHeight * .5 - (CrystalSides/2)
+        },
+        {
+            x = WindowWidth - (WallWidth * 2) - (CrystalSides/2),
+            y = WindowHeight - (JumpHeight * 2.6) - (CrystalSides/2)
+        }
+    }
 }
 
 IcePlayer = {}
@@ -84,8 +150,14 @@ function love.load()
     GameWorld = GWorld:new()
     IcePlayer = Player:new(iceConfig)
     FirePlayer = Player:new(fireConfig)
+<<<<<<< HEAD
     IceCrystalManager = CrystalManager:new("Ice", "assets/explosive_barrel.png")
     FireCrystalManager = CrystalManager:new("Fire", "assets/ice_crystal.png")
+=======
+    IceCrystalManager = CrystalManager:new(waterBarrelConfig)
+    FireCrystalManager = CrystalManager:new(fireBarrelConfig)
+    backgroundMusic = love.audio.newSource("assets/audio/bgm.mp3", "stream")
+>>>>>>> main
     Game:load()
 
     Explosion.load()
@@ -110,6 +182,10 @@ function love.update(dt)
             e:update(dt)
             if e:isDead() then table.remove(explosions, i) end
         end
+    end
+    if not backgroundMusic:isPlaying() then
+        backgroundMusic:setVolume(0.8)
+        backgroundMusic:play()
     end
 end
 
@@ -148,14 +224,3 @@ function love.keypressed(key)
     end
 end
 
-function resize(w, h)
-    local w1, h1 = window.width, window.height
-    local scale = math.min(w / w1, h / h1)
-    window.translateX, window.translateY, window.scale = (w - w1 * scale) / 2, (h - h1 * scale) / 2, scale
-end
-
-function love.resize(w, h)
-    if window then
-        resize(w, h)
-    end
-end

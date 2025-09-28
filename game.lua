@@ -7,8 +7,8 @@ State.current = "Menu"
 
 Temperature = 0
 
-HOT_WIN = 10
-COLD_WIN = -10
+HOT_WIN = 100
+COLD_WIN = -100
 
 local gauge
 

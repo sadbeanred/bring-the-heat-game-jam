@@ -3,22 +3,21 @@ Crystal.__index = Crystal
 CrystalSides = 15
 CrystalCornerRadius = 3
 
-function Crystal:new(x, y, faction, sprite)
+function Crystal:new(x, y, sprite, config)
     local obj = setmetatable({}, self)
     obj.collider = GameWorld.world:newBSGRectangleCollider(x, y, CrystalSides, CrystalSides, CrystalCornerRadius)
     obj.collider:setType("static")
-    obj.collider:setCollisionClass(faction .. "Crystal")
-    obj.faction = faction
+    obj.collider:setCollisionClass(config.faction.."Crystal")
+    obj.config = config
     obj.sprite = sprite
     return obj
 end
 
 function Crystal:update(dt)
-    if (self.faction == "Ice" and self.collider:enter("FireBullet")) then
-        self.collider:destroy()
-    end
-    if (self.faction == "Fire" and self.collider:enter("IceBullet")) then
-        self.collider:destroy()
+    if((self.config.faction == "Ice" and self.collider:enter("FireBullet")) or
+         (self.config.faction == "Fire" and self.collider:enter("IceBullet"))) then
+          self.config.audio.kill:clone():play()
+          self.collider:destroy()
     end
 end
 

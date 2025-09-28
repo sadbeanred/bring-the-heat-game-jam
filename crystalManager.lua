@@ -33,12 +33,12 @@ CrystalLocations = {
         }
     }
 }
-function CrystalManager:new(faction, spritePath)
+function CrystalManager:new(config)
     local obj = setmetatable({}, self)
-    obj.faction = faction
+    obj.config = config
     obj.timer = 0
     obj.crystals = {}
-    obj.sprite = love.graphics.newImage(spritePath)
+    obj.sprite = love.graphics.newImage(config.sprite)
     return obj
 end
 
@@ -52,20 +52,25 @@ function CrystalManager:update(dt)
     for i, crystal in ipairs(self.crystals) do
         crystal:update(dt)
         if(crystal.collider:isDestroyed()) then
-            DestroyCrystal(crystal.faction)
+            DestroyCrystal(crystal.config.faction)
             table.remove(self.crystals, i)
         end
     end
 end
 
 function CrystalManager:spawnCrystal()
-    for i, location in ipairs(CrystalLocations[self.faction]) do
+    local availableLocations = {}
+    for i, location in ipairs(self.config.spawnLocations) do
         if next(GameWorld.world:queryRectangleArea(location.x, location.y, CrystalSides, CrystalSides, {"Crystal"})) == nil then
-            local crystal = Crystal:new(location.x, location.y, self.faction, self.sprite)
-            table.insert(self.crystals, crystal)
-            break
+            table.insert(availableLocations, location)
         end
     end
+    if #availableLocations == 0 then
+        return
+    end
+    local location = availableLocations[math.random(#availableLocations)]
+    local crystal = Crystal:new(location.x, location.y, self.sprite, self.config)
+    table.insert(self.crystals, crystal)
 end
 
 function CrystalManager:draw()
