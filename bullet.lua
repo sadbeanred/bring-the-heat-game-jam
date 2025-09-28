@@ -41,14 +41,36 @@ function Bullet:update(dt)
             self.collider:destroy()
         end
     end
+    if self.collider:enter("EnergyField")then
+        table.insert(Explosions, Explosion.new(px,py, {r=.8,g=.2,b=0.6}))
+        self.collider:destroy()
+    end
 
-    if self.collider:enter("EnergyField") or
+    if
         self.collider:enter("Terrain")
     then
-
         table.insert(Explosions, Explosion.new(px,py, {r=.2,b=.2,g=.2}))
         self.collider:destroy()
     end
+
+    if
+        self.collider:enter("Terrain")
+    then
+        table.insert(Explosions, Explosion.new(px,py, {r=.2,b=.2,g=.2}))
+        self.collider:destroy()
+    end
+
+    if self.collider:enter("IceCrystal") and self.from.config.name == "Fire" then
+        table.insert(Explosions, Explosion.new(px,py, {r=1,b=0,g=0}))
+        self.collider:destroy()
+
+    end
+    if self.collider:enter("FireCrystal") and self.from.config.name == "Ice" then
+        table.insert(Explosions, Explosion.new(px,py, {r=0,b=1,g=0}))
+        self.collider:destroy()
+
+    end
+
 end
 
 function Bullet:draw()

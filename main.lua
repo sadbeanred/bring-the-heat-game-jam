@@ -6,6 +6,7 @@ require "menu"
 require "crystal"
 require "crystalManager"
 Screen = require "lib.shack.shack"
+Bg, _ = require "effects.background"
 
 joystick = love.joystick.getJoysticks()[1]
 
@@ -140,6 +141,7 @@ Entities = {}
 Explosion = require("effects.explosion")
 
 Explosions = {}
+Background = {}
 
 
 
@@ -156,6 +158,7 @@ function love.load()
     Game:load()
 
     Explosion.load()
+    Background = Bg:new()
 end
 
 function love.update(dt)
@@ -177,6 +180,7 @@ function love.update(dt)
             e:update(dt)
             if e:isDead() then table.remove(Explosions, i) end
         end
+        Background:update(Temperature)
     end
     if not backgroundMusic:isPlaying() then
         backgroundMusic:setVolume(0.8)
@@ -186,9 +190,10 @@ end
 
 function love.draw()
     if State.current == "Game" then
+        Background:draw()
+        GameWorld:draw()
         IcePlayer:draw()
         FirePlayer:draw()
-        GameWorld:draw()
         IceCrystalManager:draw()
         FireCrystalManager:draw()
         Screen:apply()

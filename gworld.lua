@@ -103,7 +103,7 @@ function GWorld:draw()
             love.graphics.pop()
         end
         if type == "energy" then
-            love.graphics.setColor(.2,.2,1)
+            love.graphics.setColor(.6,.2,1)
             love.graphics.line( x, y, x1,y1)
         end
     end
