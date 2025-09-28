@@ -40,5 +40,6 @@ function Bullet:update(dt)
     if self.collider:enter("EnergyField") or
         self.collider:enter("Terrain") then
         self.collider:destroy()
+        table.remove(self.from.bullets, 1)
     end
 end

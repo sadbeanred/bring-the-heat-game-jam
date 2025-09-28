@@ -28,7 +28,6 @@ function ChangeScore(value)
 end
 
 function PlayerWin(side, score)
-    Temperature = 0
     State.current = "GameOver"
 end
 
